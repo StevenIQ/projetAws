@@ -89,19 +89,19 @@ class S3:
 class RDS:
 
     def __init__(self):
-        self.cnx =  mysql.connector.connect(user='admin', password='adminadmin',
-                          host='database-projet-final.cr3gygd34o8b.us-east-1.rds.amazonaws.com',
-                          database='notes')
+        self.cnx =  mysql.connector.connect(user='projet-final-user', password='adminadmin',
+                          host='notes-ges.c4z9zltlpz3y.us-east-2.rds.amazonaws.com',
+                          database='notes-ges')
  
     def clear(self):
         cursor = self.cnx.cursor()
-        cursor.execute("delete from notes")
+        cursor.execute("delete from notes-ges")
         self.cnx.commit()
         return 
         
     def insert(self, data):
         cursor = self.cnx.cursor()
-        add_query = ("INSERT INTO notes "
+        add_query = ("INSERT INTO notes-ges "
                    "(matiere, intervenant, coef, ects, CC1, CC2) "
                    "VALUES (%s, %s, %s, %s, %s, %s)")
         for i in data[0].split("|"):
@@ -119,9 +119,9 @@ class RDS:
         
         cursor = self.cnx.cursor()
         if(filter == ''):
-            cursor.execute("SELECT * FROM notes")
+            cursor.execute("SELECT * FROM notes-ges")
         else:
-            cursor.execute("SELECT * FROM notes WHERE matiere LIKE '%{filter}%'")
+            cursor.execute("SELECT * FROM notes-ges WHERE matiere LIKE '%{filter}%'")
         
         data = []
         for (matiere, intervenant, CC1, CC2, coef, ects) in cursor:
