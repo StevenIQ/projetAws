@@ -101,7 +101,7 @@ class RDS:
         
     def insert(self, data):
         cursor = self.cnx.cursor()
-        add_query = ("INSERT INTO notes-ges "
+        sql_querry = ("INSERT INTO notes-ges "
                    "(matiere, intervenant, coef, ects, CC1, CC2) "
                    "VALUES (%s, %s, %s, %s, %s, %s)")
         for i in data[0].split("|"):
@@ -111,7 +111,7 @@ class RDS:
             print(split_data)
             insert_data = (split_data[0], split_data[1], split_data[2], split_data[3], split_data[4], split_data[5])
             print(insert_data)
-            cursor.execute(add_query, insert_data)
+            cursor.execute(sql_querry, insert_data)
         self.cnx.commit()
         return
     
