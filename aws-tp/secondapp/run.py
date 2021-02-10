@@ -7,31 +7,31 @@ app = Flask(__name__)
 
 @app.route("/load/s3")
 def loadS3():
-    matiere = ''
+    NomMatiere = ''
     if 'matiere' in request.args:
-        matiere = request.args['matiere']
+        NomMatiere = request.args['matiere']
     s3 = S3()
-    result = s3.load(matiere)
-    response = Response(result)
+    resultS3 = s3.load(NomMatiere)
+    response = Response(resultS3)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 @app.route("/load/rds")
 def loadRDS():
-    matiere = ''
+    NomMatiere = ''
     if 'matiere' in request.args:
-        matiere = request.args['matiere']
+        NomMatiere = request.args['matiere']
     rds = RDS()
-    result = rds.load(matiere)
-    response = Response(result)
+    resultRDS = rds.load(NomMatiere)
+    response = Response(resultRDS)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
     
-@app.route("/clear")
-def clearRDS():
+@app.route("/empty")
+def emptyRDS():
     rds = RDS()
-    result = rds.clear()
-    response = Response("Clear")
+    resultRDS = rds.empty()
+    response = Response("empty")
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
     
@@ -50,8 +50,8 @@ def transfertToRDS():
 class S3:
     def __init__(self):
         self.s3 = boto3.client('s3',
-                               aws_access_key_id='AKIAQZRPYR55AKQNZNWI',
-                               aws_secret_access_key='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')
+                               aws_access_key_id='AKIAVXK5RXNCUOIGFJ52',
+                               aws_secret_access_key='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')
 
     def load(self, filter):
         if(filter == ''):
@@ -59,8 +59,8 @@ class S3:
         else:
             request = F"SELECT * FROM s3object s WHERE s._1 LIKE '%{filter}%'"
         response = self.s3.select_object_content(
-            Bucket='projet-final',
-            Key='notes-ges.csv',
+            Bucket='projetfinalaws',
+            Key='matiers-esgi.csv',
             ExpressionType='SQL',
             Expression=request,
             InputSerialization={
@@ -93,7 +93,7 @@ class RDS:
                           host='notes-ges.c4z9zltlpz3y.us-east-2.rds.amazonaws.com',
                           database='notes-ges')
  
-    def clear(self):
+    def empty(self):
         cursor = self.cnx.cursor()
         cursor.execute("delete from notes-ges")
         self.cnx.commit()

@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-IP = "localhost"
+IP = "35.180.135.182"
 PORT = 3000
 
 def build_url(route):
@@ -17,7 +17,7 @@ def build_html_url(route, name):
 def hello():
     return F"Hello from this super app, list of available routes:<br>{build_html_url('load/s3', 'load data from s3')}" \
                 F"<br>{build_html_url('load/rds', 'load data from rds')}" \
-                F"<br>{build_html_url('clear', 'clear rds data')}" \
+                F"<br>{build_html_url('empty', 'empty rds data')}" \
                 F"<br>{build_html_url('transfert/rds', 'transfert s3 data to rds')}" 
                 
 @app.route("/load/s3")
@@ -28,9 +28,9 @@ def loadS3():
 def loadRDS():
     return requests.get(url=build_url("/load/rds")).text
     
-@app.route("/clear")
-def clearRDS():
-    return requests.get(url=build_url("/clear")).text
+@app.route("/empty")
+def emptyRDS():
+    return requests.get(url=build_url("/empty")).text
 
 @app.route("/transfert/rds")
 def transfertToRDS():
